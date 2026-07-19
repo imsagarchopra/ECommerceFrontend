@@ -1,18 +1,35 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ProductService, Product } from './product'; // 👈 Import our service
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule], // Allows us to use standard loops and conditions in HTML
+  imports: [CommonModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
-  // A TypeScript array simulating our backend entity database tables
-  products = [
-    { id: 1, name: 'MacBook Pro M3', price: 1999.99, stock: 12 },
-    { id: 2, name: 'Sony WH-1000XM5', price: 399.99, stock: 45 },
-    { id: 3, name: 'Mechanical Keyboard', price: 129.50, stock: 0 }
-  ];
+export class App implements OnInit {
+  // Initialize an empty array waiting for database records
+  products: Product[] = [];
+
+  // Inject our product service container using constructor injection
+  constructor(private productService: ProductService) {}
+
+  // OnInit acts exactly like a Page_Load event or a component mounting handler lifecycle hook
+  ngOnInit(): void {
+    this.loadProducts();
+  }
+
+  loadProducts(): void {
+    // Subscribe activates the cold HTTP network stream channel to download data
+    this.productService.getProducts().subscribe({
+      next: (data) => {
+        this.products = data; // Assign data straight to our class variable
+      },
+      error: (err) => {
+        console.error('Failed to communicate with .NET Engine:', err);
+      }
+    });
+  }
 }
