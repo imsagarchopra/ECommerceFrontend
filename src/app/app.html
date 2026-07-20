@@ -8,11 +8,12 @@
     @for (product of products; track product.id) {
       <div class="product-card">
         <h3>{{ product.name }}</h3>
+        <p>Description: {{ product.description }}</p>
         <p>Price: <strong>${{ product.price }}</strong></p>
         
         <!-- Angular Conditional: Show out of stock warning tags -->
-        @if (product.stock > 0) {
-          <p class="in-stock">In Stock: {{ product.stock }} units</p>
+        @if (product.stockQuantity > 0) {
+          <p class="in-stock">In Stock: {{ product.stockQuantity }} units</p>
         } @else {
           <p class="out-of-stock">Warning: Out of Stock</p>
         }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductService, Product } from './product'; // 👈 Import our service
 
@@ -14,7 +14,8 @@ export class App implements OnInit {
   products: Product[] = [];
 
   // Inject our product service container using constructor injection
-  constructor(private productService: ProductService) {}
+  constructor(private productService: ProductService,
+     private cdr: ChangeDetectorRef) {}
 
   // OnInit acts exactly like a Page_Load event or a component mounting handler lifecycle hook
   ngOnInit(): void {
@@ -25,7 +26,9 @@ export class App implements OnInit {
     // Subscribe activates the cold HTTP network stream channel to download data
     this.productService.getProducts().subscribe({
       next: (data) => {
+        console.log('Raw data received from API:', data);
         this.products = data; // Assign data straight to our class variable
+        this.cdr.detectChanges(); // Manually trigger change detection to update the view after data assignment
       },
       error: (err) => {
         console.error('Failed to communicate with .NET Engine:', err);
