@@ -2,16 +2,44 @@
   <h1>E-Commerce Management Console</h1>
   <hr />
 
+  <!-- Creation Form -->
+  <div class="form-container">
+    <h2>Add New Product</h2>
+    <form (ngSubmit)="createProduct()">
+      <div class="form-group">
+        <label>Product Name:</label>
+        <input type="text" [(ngModel)]="newProduct.name" name="name" required placeholder="e.g. Wireless Mouse" />
+      </div>
+
+      <div class="form-group">
+        <label>Description:</label>
+        <input type="text" [(ngModel)]="newProduct.description" name="description" required placeholder="e.g. High-quality wireless mouse" />
+      </div>
+
+      <div class="form-group">
+        <label>Price ($):</label>
+        <input type="number" [(ngModel)]="newProduct.price" name="price" required />
+      </div>
+
+      <div class="form-group">
+        <label>Stock Quantity:</label>
+        <input type="number" [(ngModel)]="newProduct.stockQuantity" name="stock" required />
+      </div>
+
+      <button type="submit">Create Product</button>
+    </form>
+  </div>
+
+  <hr />
+
   <h2>Available Products Inventory</h2>
   
   <div class="product-grid">
     @for (product of products; track product.id) {
       <div class="product-card">
         <h3>{{ product.name }}</h3>
-        <p>Description: {{ product.description }}</p>
         <p>Price: <strong>${{ product.price }}</strong></p>
         
-        <!-- Angular Conditional: Show out of stock warning tags -->
         @if (product.stockQuantity > 0) {
           <p class="in-stock">In Stock: {{ product.stockQuantity }} units</p>
         } @else {

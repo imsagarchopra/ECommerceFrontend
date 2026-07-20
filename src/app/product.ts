@@ -4,12 +4,15 @@ import { Observable } from 'rxjs';
 
 // Define a strict TypeScript interface mapping directly to your C# Product Entity
 export interface Product {
-  id: number;
+  id: string;
   name: string;
   description: string;
   price: number;
   stockQuantity: number;
 }
+
+// Omit 'id' for creation payloads since DB generates the primary key
+export type CreateProductDto = Omit<Product, 'id'>;
 
 @Injectable({
   providedIn: 'root' // 👈 This registers the class with Angular's Dependency Injection container
@@ -24,5 +27,9 @@ export class ProductService {
   // Returns an "Observable" stream containing our array of products
   getProducts(): Observable<Product[]> {
     return this.http.get<Product[]>(this.apiUrl); // 👈 Executes a GET request
+  }
+
+  addProduct(product: CreateProductDto): Observable<Product> {
+    return this.http.post<Product>(this.apiUrl, product); // 👈 Executes a POST request
   }
 }
